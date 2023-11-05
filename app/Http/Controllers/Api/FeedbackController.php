@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\FeedbackResource;
 use App\Models\Feedback;
 
 
@@ -15,7 +16,7 @@ class FeedbackController extends Controller
      */
     public function index()
     {
-        return Feedback::all();
+        return FeedbackResource::collection(Feedback::paginate(10));
         
 
         
