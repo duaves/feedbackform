@@ -1,8 +1,12 @@
 import './bootstrap';
 import React from 'react';
 
-import {render} from "react-dom"
+
+import {createRoot} from 'react-dom/client'
+ 
 import FeedbackIndex from './Pages/Feedbacks';
 
-render(<FeedbackIndex/>, document.getElementById('app'))
+
+const root = createRoot(document.getElementById('app'));
+root.render(<FeedbackIndex/>);
 
