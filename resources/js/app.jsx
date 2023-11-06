@@ -4,9 +4,9 @@ import React from 'react';
 
 import {createRoot} from 'react-dom/client'
  
-import FeedbackIndex from './Pages/Feedbacks';
+import App from './Layouts/App';
 
 
 const root = createRoot(document.getElementById('app'));
-root.render(<FeedbackIndex/>);
+root.render(<App/>);
 

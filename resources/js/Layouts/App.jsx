@@ -1,0 +1,59 @@
+import React from "react";
+import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
+import FeedbacksIndex from "../Pages/Feedbacks/index";
+import Form from "../Pages/Feedbacks/Form";
+
+function App() {
+    return (
+        <BrowserRouter>
+        <div className="min-h-screen bg-gray-100">
+            <nav className="bg-white border-b border-gray-100">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex h-16">
+                        <div className="flex">
+                            <div className="shrink-0 flex items-center">
+                                React Course
+                            </div>
+                        </div>
+                        <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                            <Link to="/" className="inline-flex items-center px-1 pt-1 border-b-2 border-indigo-200 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out">Feedbacks</Link>
+                            <Link to="/feedbacks/form" className="inline-flex items-center px-1 pt-1 border-b-2 border-indigo-200 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out">Form</Link>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <header className="bg-white shadow">
+                <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                        Dashboard
+                    </h2>
+                </div>
+            </header>
+            <main>
+                <div className="py-12">
+                    <div className="max-w-9xl mx-auto sm:px-6 lg:px-8">
+                        <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                            <div className="p-6 bg-white border-b border-gray-200">
+                           
+                                <Routes>
+                                    <Route
+                                        path="/"
+                                        element={<FeedbacksIndex />}
+                                    ></Route>
+                                    <Route
+                                        path="/feedbacks/form"
+                                        element={<Form/>}
+                                    ></Route>
+                                </Routes>
+                                </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        </BrowserRouter>
+    );
+}
+
+export default App;

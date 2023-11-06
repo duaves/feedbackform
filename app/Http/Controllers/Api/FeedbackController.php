@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\FeedbackResource;
 use App\Models\Feedback;
-
+use Illuminate\Http\Request;
 
 class FeedbackController extends Controller
 {
@@ -14,9 +14,24 @@ class FeedbackController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return FeedbackResource::collection(Feedback::paginate(10));
+        $orderColumn = $request->input('order_column', 'id');
+        $orderDirection = $request->input('order_direction', 'desc');
+        if(!in_array($orderColumn, ['id','theme'])){
+            $orderColumn = 'id';
+        }
+        if(!in_array($orderDirection, ['asc','desc'])){
+            $orderDirection = 'desc';
+        }
+
+        $feedback = Feedback::with('category')->when($request->filled('category_id'),function($query)use($request){
+            $query->where('category_id', $request->category_id);
+        })
+        ->orderBy($orderColumn, $orderDirection)
+        ->paginate(10);
+
+        return FeedbackResource::collection($feedback);
         
 
         
