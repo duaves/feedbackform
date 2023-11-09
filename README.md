@@ -65,3 +65,4 @@ npm run dev
 ```
 php artisan serve
 ```
+-Пароль для менеджера можно узнать в database/seeds/UserSeeder.php
