@@ -16,6 +16,7 @@ class Form extends Component {
         this.state = {
             category_id: "",
             theme: "",
+            user_id:'', 
             message: "",
             file: "",
             categories: [],
@@ -28,6 +29,13 @@ class Form extends Component {
         this.handleMessageChange = this.handleMessageChange.bind(this);
         this.handleFileChange = this.handleFileChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+    componentDidMount() {
+       
+        CategoriesService.getAll().then((response) =>
+            this.setState({ categories: response.data.data})
+        );
+        
     }
 
     handleCategoryChange(event) {
@@ -49,6 +57,8 @@ class Form extends Component {
     handleSubmit(event) {
         event.preventDefault();
 
+        
+
         if (this.state.isLoading) return;
 
         this.setState({
@@ -56,11 +66,17 @@ class Form extends Component {
             isLoading: true,
         });
 
+        const userId = localStorage.getItem('user_id');
+
         let feedbackData = new FormData();
         feedbackData.append("theme", this.state.theme);
         feedbackData.append("message", this.state.message);
         feedbackData.append("category_id", this.state.category_id);
         feedbackData.append("file", this.state.file);
+        feedbackData.append("user_id", userId);
+       
+      
+        
 
         axios
             .post("/api/feedbacks", feedbackData)
@@ -76,11 +92,7 @@ class Form extends Component {
             .finally(() => this.setState({ isLoading: false }));
     }
 
-    componentDidMount() {
-        CategoriesService.getAll().then((response) =>
-            this.setState({ categories: response.data.data })
-        );
-    }
+    
 
     errorMessage(field) {
         return (

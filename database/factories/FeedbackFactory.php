@@ -21,7 +21,6 @@ class FeedbackFactory extends Factory
             'category_id' => rand(1, 5),
             'theme' => $this->faker->text(10),
             'message' => $this->faker->text(100),
-            'answer' => $this->faker->text(100),
             'file' => $this->faker->text(10),
             'status_id' => rand(1, 5),
             

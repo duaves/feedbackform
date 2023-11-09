@@ -8,6 +8,7 @@ use App\Http\Requests\StoreFeedbackRequest;
 use App\Http\Resources\FeedbackResource;
 use App\Models\Feedback;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FeedbackController extends Controller
 {
@@ -18,28 +19,29 @@ class FeedbackController extends Controller
      */
     public function index(Request $request)
     {
+        $userId = Auth::id();
+    
+   
+    if ($userId == 1) {
         
+        $feedbacks = Feedback::with('category')
+            ->when($request->filled('category_id'), function ($query) use ($request) {
+                $query->where('category_id', $request->category_id);
+            })
+            ->orderBy($request->input('order_column', 'id'), $request->input('order_direction', 'desc'))
+            ->paginate(10);
+    } else {
         
-        
-        $orderColumn = $request->input('order_column', 'id');
-        $orderDirection = $request->input('order_direction', 'desc');
-        if(!in_array($orderColumn, ['id','theme'])){
-            $orderColumn = 'id';
-        }
-        if(!in_array($orderDirection, ['asc','desc'])){
-            $orderDirection = 'desc';
-        }
+        $feedbacks = Feedback::with('category')
+            ->where('user_id', $userId)
+            ->when($request->filled('category_id'), function ($query) use ($request) {
+                $query->where('category_id', $request->category_id);
+            })
+            ->orderBy($request->input('order_column', 'id'), $request->input('order_direction', 'desc'))
+            ->paginate(10);
+    }
 
-        $feedbacks = Feedback::with('category')->when($request->filled('category_id'),function($query)use($request){
-            $query->where('category_id', $request->category_id);
-        })
-        ->orderBy($orderColumn, $orderDirection)
-        ->paginate(10);
-
-        return FeedbackResource::collection($feedbacks);
-        
-
-        
+    return FeedbackResource::collection($feedbacks);
     }
 
     
@@ -53,8 +55,12 @@ class FeedbackController extends Controller
     public function store(StoreFeedbackRequest $request)
     {
         
+        $userId = Auth::id();
 
-        $feedback = Feedback::create($request->validated());
+       $feedbackData = $request->validated();
+        $feedbackData['user_id'] = $userId; 
+
+        $feedback = Feedback::create($feedbackData);
 
         if ($request->hasFile('file')) {
             $filename = $request->file('file')->getClientOriginalName();
@@ -109,4 +115,6 @@ class FeedbackController extends Controller
 
 
     }
+
+    
 }

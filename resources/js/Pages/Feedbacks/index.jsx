@@ -14,6 +14,7 @@ class FeedbacksIndex extends Component {
             query: {
                 page: 1,
                 id: '',
+                user_id: 2,
                 category_id: " ",
                 message: '',
                 theme: '',
@@ -74,15 +75,31 @@ class FeedbacksIndex extends Component {
     }
 
     categoryChanged(event) {
+        const selectedCategory = event.target.value;
+
+    if (selectedCategory === "Категории") {
+        // If "Категории" is selected, fetch all feedbacks without applying the category filter
         this.setState(
             {
                 query: {
-                    category_id: event.target.value,
+                    category_id: "", // Empty category_id to fetch all categories
                     page: 1,
                 },
             },
             () => this.fetchFeedbacks()
         );
+    } else {
+        // Fetch feedbacks based on the selected category
+        this.setState(
+            {
+                query: {
+                    category_id: selectedCategory,
+                    page: 1,
+                },
+            },
+            () => this.fetchFeedbacks()
+        );
+    }
     }
 
     renderPaginationLinks() {
