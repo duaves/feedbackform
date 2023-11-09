@@ -9,6 +9,6 @@ class Status extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['viewed, answered'];
+    protected $fillable = ['viewed', 'answered'];
 }
 

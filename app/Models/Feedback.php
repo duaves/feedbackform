@@ -9,7 +9,9 @@ class Feedback extends Model
 {
     use HasFactory;
 
-    public $table = 'feedbacks';
+    protected $fillable = ['user_id', 'category_id', 'theme', 'message', 'answer', 'file', 'status_id', 'created_at'];
+
+   protected $table = 'feedbacks';
 
     public function status()
     {
@@ -28,5 +30,5 @@ class Feedback extends Model
 
 
 
-    protected $fillable = ['user_id, category_id, theme, message, answer, file, status_id, created_at'];
+    
 }

@@ -16,23 +16,26 @@ class FeedbackResource extends JsonResource
     {
         return [
             'id'=>$this->id,
+            'user_id' => $this->user_id,
             'user'=>[
-                'id'=>$this->user->id,
-                'name'=>$this->user->name,
-                'email'=>$this->user->email,
+                'id'=>$this->user->id ?? '',
+                'name'=>$this->user->name ?? '',
+                'email'=>$this->user->email ?? '',
             ],
+            'category_id' => $this->category_id,
             'category'=>[
-                'id'=>$this->category->id,
-                'category'=>$this->category->category
+                'id'=>$this->category->id ?? '',
+                'category'=>$this->category->category ?? '',
             ],
             'theme'=>$this->theme,
-            'message'=>substr($this->message, 0, 25) . '...',
-            'answer'=>substr($this->answer, 0, 25) . '...',
-            'file'=>$this->file,
+            'message'=>substr($this->message, 0, 25) ,
+            'answer'=>substr($this->answer, 0, 25),
+            'file'=>substr($this->file, 0, 10),
+            'status_id' => $this->status_id,
             'status'=>[
-                'id'=>$this->status->id,
-                'viewed'=>$this->status->viewed,
-                'answered'=>$this->status->answered,
+                'id'=>$this->status->id ?? '',
+                'viewed'=>$this->status->viewed ?? '',
+                'answered'=>$this->status->answered ?? '',
             ],
             'created_at'=>$this->created_at->toDateTimeString(),
         ]; 

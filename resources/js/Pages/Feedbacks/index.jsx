@@ -1,5 +1,8 @@
 import axios from "axios";
 import React, { Component } from "react";
+import CategoriesService from "../../Services/CategoriesService";
+import { Link } from "react-router-dom";
+import { Can } from "../../Abilities/Can";
 
 class FeedbacksIndex extends Component {
     constructor(props) {
@@ -10,7 +13,10 @@ class FeedbacksIndex extends Component {
             categories: [],
             query: {
                 page: 1,
+                id: '',
                 category_id: " ",
+                message: '',
+                theme: '',
                 order_column: "id",
                 order_direction: "desc",
             },
@@ -27,14 +33,6 @@ class FeedbacksIndex extends Component {
             .then((response) => this.setState({ feedbacks: response.data }));
     }
 
-    fetchCategories() {
-        axios
-            .get("/api/categories")
-            .then((response) =>
-                this.setState({ categories: response.data.data })
-            );
-    }
-
     renderCategoryFilter() {
         const categories = this.state.categories.map((category) => (
             <option key={category.id} value={category.id}>
@@ -43,16 +41,21 @@ class FeedbacksIndex extends Component {
         ));
 
         return (
-            <select onChange={this.categoryChanged}>
-                <option> --все категории--</option>
+            <select
+                className="border-2  border-gray-300 rounded-md  text-sm  hover:border-blue-500 focus:outline-none focus:border-blue-500"
+                onChange={this.categoryChanged}
+            >
+                <option>Категории</option>
                 {categories}
             </select>
         );
     }
 
     componentDidMount() {
+        CategoriesService.getAll().then((response) =>
+            this.setState({ categories: response.data.data })
+        );
         this.fetchFeedbacks();
-        this.fetchCategories();
     }
 
     pageChanged(url) {
@@ -158,6 +161,7 @@ class FeedbacksIndex extends Component {
                     </div>
                 </td>
                 <td className="px-2 py-4"> {feedback.message}</td>
+                <td className="px-2 py-4"> {feedback.answer}</td>
 
                 <td className="px-2 py-4 ">
                     <div className="text-sm font-normal text-gray-900">
@@ -201,16 +205,16 @@ class FeedbacksIndex extends Component {
                 </td>
 
                 <td className=" px-2 py-4">
-                    <div className="flex flex-col space-y-1">
-                        <span className="inline-flex items-center gap-1 rounded-full bg-indigo-50 px-2 py-1 text-xs font-semibold text-indigo-600">
-                            <span className="h-1.5 w-1.5 rounded-full bg-indigo-500"></span>
-                            {feedback.status.viewed}
-                        </span>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-xs font-semibold text-green-600">
-                            <span className="h-1.5 w-1.5 rounded-full bg-green-600"></span>
-                            {feedback.status.answered}
-                        </span>
-                    </div>
+                    <Can do="feedback_answer">
+                    <Link to={`answer/${feedback.id}`}>
+                        <button
+                            type="button"
+                            className="nline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        >
+                            Ответить
+                        </button>
+                    </Link>
+                    </Can>
                 </td>
             </tr>
         ));
@@ -241,31 +245,31 @@ class FeedbacksIndex extends Component {
                         d={icon}
                     />
                 </svg>
-                
             </>
-        )
+        );
     }
 
     orderChanged(column) {
         let direction = "asc";
         if (column === this.state.query.order_column) {
-            direction = this.state.query.order_direction === "asc" ? "desc" : "asc"
+            direction =
+                this.state.query.order_direction === "asc" ? "desc" : "asc";
         }
 
-        this.setState((
+        this.setState(
             {
                 query: {
                     page: 1,
                     order_column: column,
                     order_direction: direction,
                 },
-            }),
+            },
             () => this.fetchFeedbacks()
-        )
+        );
     }
 
     render() {
-        if (!("data" in this.state.feedbacks)) return;
+        if (!('data' in this.state.feedbacks)) return;
         return (
             <div>
                 <div className="ml-5">{this.renderCategoryFilter()}</div>
@@ -280,7 +284,9 @@ class FeedbacksIndex extends Component {
                                     >
                                         ID
                                         <button
-                                            onClick={()=>this.orderChanged("id")}
+                                            onClick={() =>
+                                                this.orderChanged("id")
+                                            }
                                             type="button"
                                             className="column-sort"
                                         >
@@ -296,19 +302,29 @@ class FeedbacksIndex extends Component {
                                     <th
                                         scope="col"
                                         className="flex items-center px-2 py-4 font-medium text-gray-900"
-                                    >   
+                                    >
                                         Тема
-                                        <button onClick={() => this.orderChanged("theme")} 
-                                        type="button" 
-                                        className="column-sort">
-                                        { this.orderColumnIcon("theme") }
-                                    </button>
+                                        <button
+                                            onClick={() =>
+                                                this.orderChanged("theme")
+                                            }
+                                            type="button"
+                                            className="column-sort"
+                                        >
+                                            {this.orderColumnIcon("theme")}
+                                        </button>
                                     </th>
                                     <th
                                         scope="col"
                                         className="px-2 py-4 font-medium text-gray-900"
                                     >
                                         Сообщение
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="px-2 py-4 font-medium text-gray-900"
+                                    >
+                                        Ответ
                                     </th>
 
                                     <th
@@ -338,9 +354,7 @@ class FeedbacksIndex extends Component {
                                     <th
                                         scope="col"
                                         className="px-2 py-4 font-medium text-gray-900"
-                                    >
-                                        Статус
-                                    </th>
+                                    ></th>
                                 </tr>
                             </thead>
 

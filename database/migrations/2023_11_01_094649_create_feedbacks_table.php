@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('feedbacks', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->default(2);
             $table->unsignedBigInteger('category_id');
-            $table->string('theme');
-            $table->text('message');
+            $table->string('theme')->nullable();
+            $table->text('message')->nullable();
             $table->text('answer')->nullable();
             $table->string('file')->nullable();
-            $table->unsignedBigInteger('status_id');
+            $table->unsignedBigInteger('status_id')->default(1);
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('category_id')->references('id')->on('categories');
             $table->foreign('status_id')->references('id')->on('statuses');

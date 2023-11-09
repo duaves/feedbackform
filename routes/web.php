@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,4 +17,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'layouts.app');
 
+Route::post('login', [LoginController::class, 'store']);
+Route::post('logout', [LoginController::class, 'destroy']);
+Route::post('register', [RegisteredUserController::class, 'store']);
+
+
 Route::view('/{any?}', 'layouts.app')->where('any', '.*');
+
