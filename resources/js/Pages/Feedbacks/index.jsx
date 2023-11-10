@@ -78,18 +78,18 @@ class FeedbacksIndex extends Component {
         const selectedCategory = event.target.value;
 
     if (selectedCategory === "Категории") {
-        // If "Категории" is selected, fetch all feedbacks without applying the category filter
+        
         this.setState(
             {
                 query: {
-                    category_id: "", // Empty category_id to fetch all categories
+                    category_id: "", 
                     page: 1,
                 },
             },
             () => this.fetchFeedbacks()
         );
     } else {
-        // Fetch feedbacks based on the selected category
+        
         this.setState(
             {
                 query: {
@@ -154,9 +154,17 @@ class FeedbacksIndex extends Component {
         );
     }
 
+    
+
     renderFeedbacks() {
+
+        
         return this.state.feedbacks.data.map((feedback) => (
-            <tr key={feedback.id} className=" hover:bg-gray-50">
+
+            
+            
+            <tr  key={feedback.id} className=" hover:bg-gray-50">
+                
                 <td className="px-4 py-4">
                     <div className="font-medium text-gray-700">
                         {feedback.id}
@@ -177,8 +185,8 @@ class FeedbacksIndex extends Component {
                         </div>
                     </div>
                 </td>
-                <td className="px-2 py-4"> {feedback.message}</td>
-                <td className="px-2 py-4"> {feedback.answer}</td>
+                <td className="px-2 py-4" style={{ wordWrap: 'break-word', maxWidth: '200px' }}> {feedback.message}</td>
+                <td className="px-2 py-4" style={{ wordWrap: 'break-word', maxWidth: '200px' }}> {feedback.answer}</td>
 
                 <td className="px-2 py-4 ">
                     <div className="text-sm font-normal text-gray-900">
@@ -195,7 +203,9 @@ class FeedbacksIndex extends Component {
                     </div>
                 </td>
                 <td className=" px-2 py-4">
-                    <div className="flex">
+                    
+                    {feedback.file && (
+                        <a className="flex" href={feedback.file} download> 
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -210,8 +220,11 @@ class FeedbacksIndex extends Component {
                                 d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13"
                             />
                         </svg>
-                        {feedback.file}
-                    </div>
+                        Файл
+                        </a>
+                    )}
+                        
+                    
                 </td>
                 <td className="  px-2 py-4 ">
                     <div className="text-sm font-normal text-gray-900">
@@ -233,7 +246,10 @@ class FeedbacksIndex extends Component {
                     </Link>
                     </Can>
                 </td>
+                
+                
             </tr>
+            
         ));
     }
 
@@ -372,6 +388,7 @@ class FeedbacksIndex extends Component {
                                         scope="col"
                                         className="px-2 py-4 font-medium text-gray-900"
                                     ></th>
+                                    
                                 </tr>
                             </thead>
 

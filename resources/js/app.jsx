@@ -13,6 +13,7 @@ import Login from "./Pages/Auth/Login";
 import Register from "./Pages/Auth/Register";
 import { AbilityContext } from "./Abilities/Can";
 import Ability from "./Abilities/Ability";
+import Info from "./Pages/Feedbacks/Info";
 
 const root = createRoot(document.getElementById("app"));
 root.render(
@@ -26,6 +27,10 @@ root.render(
                         path="/feedbacks/answer/:id"
                         element={<Answer />}
                     ></Route>
+                    <Route
+                        path="/feedbacks/info/:id"
+                        element={<Info />}
+                    ></Route>
                 </Route>
                 <Route path="login" element={<Guest />}>
                     <Route index element={<Login />}></Route>
@@ -37,6 +42,7 @@ root.render(
                     path="*"
                     element={<Navigate to="/feedbacks" replace />}
                 />
+                
             </Routes>
         </BrowserRouter>
     </AbilityContext.Provider>

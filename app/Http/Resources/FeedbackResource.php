@@ -28,9 +28,9 @@ class FeedbackResource extends JsonResource
                 'category'=>$this->category->category ?? '',
             ],
             'theme'=>$this->theme,
-            'message'=>substr($this->message, 0, 25) ,
-            'answer'=>substr($this->answer, 0, 25),
-            'file'=>substr($this->file, 0, 10),
+            'message'=>$this->message,
+            'answer'=>$this->answer,
+            'file'=>$this->file,
             'status_id' => $this->status_id,
             'status'=>[
                 'id'=>$this->status->id ?? '',
