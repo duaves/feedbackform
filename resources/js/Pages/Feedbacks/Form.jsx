@@ -86,9 +86,13 @@ class Form extends Component {
                     title: 'Заявка успешно отправлена'
                 });
                 this.props.navigate("/")})
-            .catch((error) =>
+            .catch((error) =>{
                 this.setState({ errors: error.response.data.errors })
-            )
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Вы можете отправлять заявку только 1 раз в сутки'
+                })
+    })
             .finally(() => this.setState({ isLoading: false }));
     }
 

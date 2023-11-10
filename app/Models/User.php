@@ -42,6 +42,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($user) {
+            
+            $defaultRole = Role::where('name', 'user')->first(); 
+            $user->roles()->attach($defaultRole);
+        });
+    }
+
 
     public function roles(){
         return $this->belongsToMany(Role::class);
